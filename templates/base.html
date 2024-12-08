@@ -1,0 +1,187 @@
+{% load bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media Feed</title>
+    {% bootstrap_css %}
+    {% load static %}
+    <style>
+        /* Custom styles applied to the Bootstrap structure */
+        .header {
+            width: 100%;
+            height: 75px;
+            background: #17141d;
+            opacity: 0.95;
+            overflow: hidden;
+            box-shadow: #333 1px 3px 4px;
+            position: relative; /* To position the search bar */
+        }
+
+        .menu {
+            width: 750px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative; /* To position the search bar */
+            z-index: 1; /* Ensure the menu is above the background */
+        }
+
+        /* Navbar style with black background */
+        .navbar {
+            background-color: #17141d; /* Set to black */
+            border-radius: 15px; /* Rounded edges */
+            padding: 10px; /* Padding inside the navbar */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: -25px; /* Move the navbar up */
+            position: relative; /* Relative positioning */
+            z-index: 2; /* Higher z-index to ensure it overlaps */
+        }
+
+        ul.navbar-nav {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+        }
+
+        ul.navbar-nav li.nav-item {
+            padding: 10px;
+            color: white; /* Keep text color white */
+            text-transform: uppercase;
+            letter-spacing: 3.5px;
+            cursor: pointer;
+            transition: all 0.5s ease-out;
+        }
+
+        ul.navbar-nav li.nav-item:hover {
+            color: orange;
+            transform: scale(1.1);
+        }
+
+        li.nav-item.active {
+            color: orange;
+            transform: scale(1.1);
+        }
+
+        svg.line-top {
+            width: 100%;
+            background-color: #17141d;
+        }
+
+        svg.line-bottom {
+            width: 100%;
+        }
+
+        polygon {
+            stroke-width: 2px;
+            stroke: orange;
+            fill: orange;
+        }
+
+        /* Style for search bar */
+        .search-bar {
+            margin-left: auto;
+        }
+
+        .search-bar input {
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="menu">
+        <!-- Top Line Decoration -->
+        <svg class="line-top" width="750" height="15" viewbox="0,0 1000,20">
+            <line
+                class="line-dash"
+                x1="0"
+                y1="15"
+                x2="1000"
+                y2="15"
+                style="stroke: orange; stroke-width:2; stroke-linecap:round; stroke-dasharray: 180,1200; stroke-dashoffset: -35;"
+            />
+        </svg>
+
+        <!-- Bootstrap-based Navigation Menu -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'feed' %}">Social Media Feed</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'feed' %}">Feed</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'post_create' %}">New Post</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'user_profile' user.username %}">Profile</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <!-- Search Bar -->
+                    <form class="d-flex search-bar" role="search" action="{% url 'search_users' %}">
+                        <input class="form-control me-2" type="search" placeholder="Search Users" aria-label="Search" name="q" />
+                        <button class="btn btn-outline-light" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Bottom Line Decoration -->
+        <svg class="line-bottom" width="750" height="30" viewbox="0,0 1000,40">
+            <polygon class="lb" points="35,53 115,53 125,43 135,53 215,53" />
+            <polygon class="lb" points="285,53 365,53 375,43 385,53 465,53" />
+            <polygon class="lb" points="535,53 615,53 625,43 635,53 715,53" />
+            <polygon class="lb" points="785,53 865,53 875,43 885,53 965,53" />
+        </svg>
+    </div>
+</header>
+{% if not user.is_authenticated %}
+<div id="photoCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://www.tributemedia.com/hs-fs/hubfs/shutterstock_721686649.jpg?width=1240&name=shutterstock_721686649.jpg" class="d-block w-100" alt="Slide 1">
+    </div>
+    <div class="carousel-item">
+      <img src="https://kimlam.home.blog/wp-content/uploads/2018/07/line-of-people-on-devices-cropped.jpg" class="d-block w-100" alt="Slide 2">
+    </div>
+    <div class="carousel-item">
+      <img src="https://cdn.ttgtmedia.com/visuals/ComputerWeekly/Hero%20Images/smartphone-millennials-social-media-adobe.jpeg" class="d-block w-100" alt="Slide 3">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#photoCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#photoCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+{% endif %}
+<main class="container my-4">
+    {% block content %}
+    {% endblock %}
+</main>
+
+{% bootstrap_javascript %}
+</body>
+</html>
